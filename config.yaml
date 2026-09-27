@@ -1,0 +1,27 @@
+# Edit this file to change behavior. Nothing in src/ hardcodes model names,
+# thresholds, or paths - they all flow from here.
+
+ollama:
+  host: http://localhost:11434
+
+models:
+  embed: nomic-embed-text
+  tier1: gemma3:4b
+  tier2: qwen3-coder:30b-a3b
+
+thresholds:
+  # No numeric confidence threshold here on purpose - the cascade escalates
+  # tier1 -> tier2 based on whether the model could commit to a categorical
+  # label (exact_duplicate / same_underlying_bug / related / unrelated),
+  # not a self-reported float. See src/triage.py.
+  top_k: 5           # candidates retrieved per query, for both issues and files
+
+paths:
+  mod_files_root: "~/Library/Application Support/Feral Interactive/Total War ROME REMASTERED/Mods/My Mods/RIS"
+  chroma_dir: ./data/chroma
+
+gitlab:
+  project_id: "CHANGE_ME"   # numeric project ID or "namespace/project" path
+
+discord:
+  triage_channel_id: 0      # forum channel ID where bug-report threads are posted

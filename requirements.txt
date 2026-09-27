@@ -1,0 +1,8 @@
+python-dotenv
+pyyaml
+chromadb
+openai
+discord.py
+python-gitlab
+fastapi
+uvicorn[standard]
