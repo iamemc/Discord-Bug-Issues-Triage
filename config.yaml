@@ -1,6 +1,3 @@
-# Edit this file to change behavior. Nothing in src/ hardcodes model names,
-# thresholds, or paths - they all flow from here.
-
 ollama:
   host: http://localhost:11434
 
@@ -10,7 +7,6 @@ models:
   tier2: qwen3-coder:30b-a3b
 
 thresholds:
-  # No numeric confidence threshold here on purpose - the cascade escalates
   # tier1 -> tier2 based on whether the model could commit to a categorical
   # label (exact_duplicate / same_underlying_bug / related / unrelated),
   # not a self-reported float. See src/triage.py.
@@ -24,4 +20,4 @@ gitlab:
   project_id: "CHANGE_ME"   # numeric project ID or "namespace/project" path
 
 discord:
-  triage_channel_id: 0      # forum channel ID where bug-report threads are posted
+  triage_channel_id: 1553829775800279112      # forum channel ID where bug-report threads are posted
