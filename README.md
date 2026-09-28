@@ -1,4 +1,4 @@
-# mod-triage
+# Discord-Bug-Issues-Triage
 
 Local, model-cascade pipeline that triages Discord bug reports for a game mod:
 dedups against known issues, identifies which files are affected,
