@@ -5,7 +5,7 @@ dedups against known issues, guesses which (static) mod files are affected,
 opens a GitLab issue when it's genuinely new, and learns from every merged
 fix so the knowledge base keeps improving.
 
-Everything runs locally through Ollama - no API keys, no per-token cost.
+Everything runs locally through Ollama.
 
 ## Features
 
