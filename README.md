@@ -1,7 +1,7 @@
 # mod-triage
 
 Local, model-cascade pipeline that triages Discord bug reports for a game mod:
-dedups against known issues, guesses which (static) mod files are affected,
+dedups against known issues, identifies which files are affected,
 opens a GitLab issue when it's genuinely new, and learns from every merged
 fix so the knowledge base keeps improving.
 
