@@ -1,7 +1,3 @@
-"""Loads config.yaml + .env into one namespace. This is the only place
-that reads environment variables or the yaml file - everything else
-receives a config object, so nothing downstream hardcodes a value.
-"""
 import os
 from types import SimpleNamespace
 
