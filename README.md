@@ -7,42 +7,24 @@ fix so the knowledge base keeps improving.
 
 Everything runs locally through Ollama - no API keys, no per-token cost.
 
-## What's inside
+## Features
 
-```
-mod-triage/
-├── install.sh              # one-shot setup: Ollama, models, venv, deps
-├── run.sh                  # starts the bot + webhook server
-├── requirements.txt
-├── config.yaml             # models, thresholds, paths - edit this, not the code
-├── .env.example            # secrets template (copy to .env)
-├── mod_files/               # put your mod's moddable files here
-├── src/
-│   ├── config.py            # loads config.yaml + .env
-│   ├── ollama_client.py     # embed() + judge() against Ollama's OpenAI-compatible API
-│   ├── vector_store.py      # Chroma wrapper: mod_files + known_issues collections
-│   ├── index_mod_files.py   # (re)indexes the static mod file tree
-│   ├── triage.py            # the tier1 -> tier2 cascade
-│   ├── gitlab_client.py     # python-gitlab wrapper
-│   ├── discord_bot.py       # listens for new bug-report threads
-│   ├── merge_webhook.py     # FastAPI receiver: learns from merged MRs
-│   └── main.py              # runs the bot + webhook together
-└── scripts/
-    └── dry_run.py           # test the cascade from the CLI, no Discord/GitLab needed
-```
+- Automatic triage of bug reports from Discord forum channels
+- Duplicate detection against known issues using AI models
+- File impact analysis to guess which mod files are affected
+- GitLab integration for automatic issue creation and management
+- Machine learning loop that improves over time by learning from merged fixes
+- All processing runs locally with Ollama - no cloud dependencies
 
-## Model cascade (all via Ollama, all free/open-weight)
+## Architecture
 
-| Tier | Model | Role |
-|---|---|---|
-| embed | `nomic-embed-text` | embeddings for both retrieval indices |
-| tier1 | `gemma3:4b` | fast first-pass classify (duplicate? confidence? file guess) |
-| tier2 | `qwen3-coder:30b-a3b` | only runs when tier1 confidence is low; code-aware, better at scoping affected files |
+The system follows a model cascade approach:
 
-Swap any of these by editing `config.yaml` - nothing in `src/` hardcodes a model name.
-`qwen3-coder:30b-a3b` is a ~6GB VRAM download (MoE, 3B active params) despite the
-30B label; check `ollama list` on ollama.com for anything newer if you're setting
-this up a while after reading this.
+1. **Embed**: Uses `nomic-embed-text` to create embeddings for both bug reports and mod files
+2. **Tier1**: Fast classifier (`gemma3:4b`) that determines if issue is duplicate or novel with confidence score
+3. **Tier2**: More detailed code-aware classifier (`qwen3-coder:30b-a3b`) used when tier1 confidence is low
+
+The system builds upon known issues and mod file embeddings to make intelligent decisions about bug reports.
 
 ## Setup
 
@@ -85,7 +67,7 @@ Then:
    ./run.sh
    ```
 
-## How the pieces fit together
+## How It Works
 
 1. A new Discord thread comes in -> embedded -> checked against `known_issues`
    and `mod_files` in Chroma.
@@ -100,11 +82,10 @@ Then:
    `known_issues` as ground truth - every merged fix makes future triage better,
    no fine-tuning required.
 
-## Notes
+## Requirements
 
-- `.env` holds real secrets - it's already covered by `.gitignore`, don't commit it.
-- The webhook server binds `0.0.0.0:8000` by default; put it behind a reverse
-  proxy with TLS if it's reachable from the internet, since GitLab needs to
-  reach it to fire webhooks.
-- Everything here is a working skeleton, not a hardened production service -
-  add retries/logging/error handling as it earns its keep.
+- Ollama (for AI models)
+- Python 3.8+
+- Discord Bot Token
+- GitLab Personal Access Token
+- GitLab Project ID
